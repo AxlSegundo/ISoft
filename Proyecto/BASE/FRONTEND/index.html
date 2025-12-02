@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba Asistente de Compras</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+    }
+    input, button {
+      padding: 8px;
+      font-size: 14px;
+    }
+    #carrito-input {
+      width: 70%;
+    }
+    h1, h2 {
+      margin-top: 24px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 8px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .NECESARIO { background: #2e7d32; }
+    .INTERMEDIO { background: #0277bd; }
+    .PRESCINDIBLE { background: #c62828; }
+  </style>
+</head>
+<body>
+  <h1>Asistente de Compras Inteligente (Prueba)</h1>
+
+  <p>Escribe los productos de tu carrito separados por comas, por ejemplo:</p>
+  <code>bread, milk, diapers, beers</code>
+
+  <div style="margin-top: 10px;">
+    <input
+      id="carrito-input"
+      type="text"
+      placeholder="bread, milk, diapers, beers"
+    >
+    <button id="btn-analizar">Analizar carrito</button>
+  </div>
+
+  <h2>Carrito interpretado</h2>
+  <p id="carrito-original"></p>
+
+  <h2>Recomendaciones (productos que podrías agregar)</h2>
+  <ul id="lista-recomendaciones"></ul>
+
+  <h2>Productos prescindibles dentro del carrito</h2>
+  <ul id="lista-prescindibles"></ul>
+
+  <h2>Detalle de productos en el carrito</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Índice de necesidad</th>
+        <th>Clasificación</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-info-carrito"></tbody>
+  </table>
+
+  <script src="app.js"></script>
+</body>
+</html>
