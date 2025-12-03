@@ -1,3 +1,4 @@
+// URL de tu API FastAPI
 const API_URL = "http://127.0.0.1:8000/analizar_carrito";
 
 // 1) Catálogo completo (ID interno en inglés, nombre en español)
@@ -52,7 +53,7 @@ const CATALOG = [
   { id: "tea", name: "Té", category: "Otros", emoji: "🍵" }
 ];
 
-
+// Subconjunto destacado para el carrusel (7 productos)
 const FEATURED_IDS = [
   "whole milk",
   "bread",
@@ -66,11 +67,10 @@ const FEATURED_IDS = [
 const FEATURED = CATALOG.filter(p => FEATURED_IDS.includes(p.id));
 
 const selectedItems = new Set();
-let carouselIndex = 0;
+let carouselIndex = 0; // índice del primer producto mostrado en el carrusel
 const CAROUSEL_VISIBLE = 4;
 
 document.addEventListener("DOMContentLoaded", () => {
-  buildSearchOptions();
   renderCarousel();
   updateCarritoUI();
 
@@ -86,18 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("btn-add-search").addEventListener("click", addFromSearch);
   document.getElementById("btn-analizar").addEventListener("click", analizarCarrito);
+
+  // Escuchar lo que se escribe para mostrar sugerencias
+  document.getElementById("search-input").addEventListener("input", onSearchInput);
 });
-
-
-function buildSearchOptions() {
-  const datalist = document.getElementById("product-options");
-  datalist.innerHTML = "";
-  CATALOG.forEach(p => {
-    const opt = document.createElement("option");
-    opt.value = p.name; 
-    datalist.appendChild(opt);
-  });
-}
 
 
 function renderCarousel() {
@@ -131,7 +123,6 @@ function renderCarousel() {
   }
 }
 
-
 function toggleProduct(productId) {
   if (selectedItems.has(productId)) {
     selectedItems.delete(productId);
@@ -142,6 +133,52 @@ function toggleProduct(productId) {
   updateCarritoUI();
 }
 
+
+function onSearchInput(e) {
+  const term = e.target.value.trim().toLowerCase();
+  const box = document.getElementById("search-suggestions");
+  box.innerHTML = "";
+
+  if (!term) {
+    return; 
+  }
+
+  // Buscar coincidencias por nombre en español o id en inglés
+  const matches = CATALOG.filter(p =>
+    p.name.toLowerCase().includes(term) ||
+    p.id.toLowerCase().includes(term)
+  ).slice(0, 8); // máximo 8 sugerencias
+
+  if (matches.length === 0) return;
+
+  const list = document.createElement("div");
+  list.className = "suggestion-list";
+
+  matches.forEach(prod => {
+    const item = document.createElement("div");
+    item.className = "suggestion-item";
+
+    item.innerHTML = `
+      <div>
+        <span class="suggestion-name">${prod.emoji} ${prod.name}</span><br>
+        <span class="suggestion-extra">${prod.category} · ID: ${prod.id}</span>
+      </div>
+      <div class="suggestion-extra">Click para agregar</div>
+    `;
+
+    item.addEventListener("click", () => {
+      selectedItems.add(prod.id);
+      document.getElementById("search-input").value = "";
+      box.innerHTML = "";
+      renderCarousel();
+      updateCarritoUI();
+    });
+
+    list.appendChild(item);
+  });
+
+  box.appendChild(list);
+}
 
 function addFromSearch() {
   const input = document.getElementById("search-input");
@@ -157,12 +194,13 @@ function addFromSearch() {
   );
 
   if (!prod) {
-    alert("No se encontró un producto con ese nombre. Intenta escribirlo igual que en las sugerencias.");
+    alert("No se encontró un producto con ese nombre. Intenta escribirlo como aparece en las sugerencias.");
     return;
   }
 
   selectedItems.add(prod.id);
   input.value = "";
+  document.getElementById("search-suggestions").innerHTML = "";
   renderCarousel();
   updateCarritoUI();
 }
@@ -229,11 +267,12 @@ async function analizarCarrito() {
   }
 }
 
-
+// Helper: obtener nombre en español desde el ID
 function getProductNameById(id) {
   const p = CATALOG.find(p => p.id === id);
   return p ? p.name : id;
 }
+
 
 function mostrarResultados(data) {
   // Recomendaciones
@@ -263,7 +302,7 @@ function mostrarResultados(data) {
     });
   }
 
-
+  // Prescindibles
   const ulPre = document.getElementById("lista-prescindibles");
   ulPre.innerHTML = "";
   if (!data.prescindibles || data.prescindibles.length === 0) {
@@ -290,7 +329,7 @@ function mostrarResultados(data) {
     });
   }
 
-
+  // Tabla info carrito
   const tbody = document.getElementById("tabla-info-carrito");
   tbody.innerHTML = "";
 
@@ -329,4 +368,3 @@ function mostrarResultados(data) {
     tbody.appendChild(tr);
   }
 }
-

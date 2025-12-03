@@ -38,17 +38,17 @@
       <input
         type="text"
         id="search-input"
-        list="product-options"
-        placeholder="Busca un producto (ej. leche, arroz, cloro)..."
+        autocomplete="off"
+        placeholder="Escribe para buscar un producto (ej. leche, arroz, cloro)..."
       >
-      <datalist id="product-options">
-        <!-- opciones generadas desde JS -->
-      </datalist>
 
       <button id="btn-add-search" class="btn-secondary">
         Agregar al carrito
       </button>
     </div>
+
+    <div id="search-suggestions" class="suggestions-box"></div>
+
 
     <h2>Carrito actual</h2>
     <div class="section-card">
