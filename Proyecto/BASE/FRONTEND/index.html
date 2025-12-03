@@ -2,84 +2,92 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Prueba Asistente de Compras</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 20px auto;
-    }
-    input, button {
-      padding: 8px;
-      font-size: 14px;
-    }
-    #carrito-input {
-      width: 70%;
-    }
-    h1, h2 {
-      margin-top: 24px;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 8px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px 8px;
-      text-align: left;
-      font-size: 14px;
-    }
-    th {
-      background: #f0f0f0;
-    }
-    .tag {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 12px;
-      color: #fff;
-    }
-    .NECESARIO { background: #2e7d32; }
-    .INTERMEDIO { background: #0277bd; }
-    .PRESCINDIBLE { background: #c62828; }
-  </style>
+  <title>Carrito Inteligente · Asistente de Compras</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Asistente de Compras Inteligente (Prueba)</h1>
+  <div class="app-container">
+    <div class="header-card">
+      <div class="header-left">
+        <div class="badge">Prototipo · Asistente de compras</div>
+        <h1>Carrito inteligente</h1>
+        <p class="small-text">
+          Usa el carrusel y la barra de búsqueda para armar tu carrito. El modelo sugerirá
+          productos que suelen comprarse juntos y marcará los menos necesarios según las reglas de asociación.
+        </p>
+      </div>
+      <div>
+        <span style="font-size:40px;">🛒</span>
+      </div>
+    </div>
 
-  <p>Escribe los productos de tu carrito separados por comas, por ejemplo:</p>
-  <code>bread, milk, diapers, beers</code>
+    <h2>Productos destacados</h2>
+    <p class="small-text">
+      Desliza el carrusel y haz clic en los bloques para agregar o quitar productos del carrito.
+    </p>
 
-  <div style="margin-top: 10px;">
-    <input
-      id="carrito-input"
-      type="text"
-      placeholder="bread, milk, diapers, beers"
-    >
-    <button id="btn-analizar">Analizar carrito</button>
+    <div class="carousel-container">
+      <button class="carousel-btn left" id="btn-prev" title="Anterior">‹</button>
+      <div id="carousel-track" class="carousel-track">
+        <!-- Se rellena desde app.js -->
+      </div>
+      <button class="carousel-btn right" id="btn-next" title="Siguiente">›</button>
+    </div>
+
+    <div class="search-row">
+      <input
+        type="text"
+        id="search-input"
+        list="product-options"
+        placeholder="Busca un producto (ej. leche, arroz, cloro)..."
+      >
+      <datalist id="product-options">
+        <!-- opciones generadas desde JS -->
+      </datalist>
+
+      <button id="btn-add-search" class="btn-secondary">
+        Agregar al carrito
+      </button>
+    </div>
+
+    <h2>Carrito actual</h2>
+    <div class="section-card">
+      <div id="carrito-chips" class="carrito-chip-list"></div>
+      <button id="btn-analizar" class="btn-primary" disabled>
+        Obtener recomendaciones
+        <span>➜</span>
+      </button>
+      <p id="estado-carrito" class="small-text"></p>
+    </div>
+
+    <h2>Resultados del modelo</h2>
+
+    <div class="section-card">
+      <h3 style="margin:4px 0 6px;font-size:16px;">Recomendaciones (productos que podrías agregar)</h3>
+      <ul id="lista-recomendaciones" class="results-list"></ul>
+
+
+    </div>
+
+    <div class="section-card">
+      <h3 style="margin:4px 0 6px;font-size:16px;">Productos prescindibles dentro del carrito</h3>
+      <ul id="lista-prescindibles" class="results-list"></ul>
+    </div>
+
+    <div class="section-card">
+      <h3 style="margin:4px 0 6px;font-size:16px;">Detalle de productos del carrito</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Índice de necesidad</th>
+            <th>Clasificación</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-info-carrito"></tbody>
+      </table>
+    </div>
   </div>
-
-  <h2>Carrito interpretado</h2>
-  <p id="carrito-original"></p>
-
-  <h2>Recomendaciones (productos que podrías agregar)</h2>
-  <ul id="lista-recomendaciones"></ul>
-
-  <h2>Productos prescindibles dentro del carrito</h2>
-  <ul id="lista-prescindibles"></ul>
-
-  <h2>Detalle de productos en el carrito</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Producto</th>
-        <th>Índice de necesidad</th>
-        <th>Clasificación</th>
-      </tr>
-    </thead>
-    <tbody id="tabla-info-carrito"></tbody>
-  </table>
 
   <script src="app.js"></script>
 </body>
